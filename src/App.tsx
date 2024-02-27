@@ -1,5 +1,7 @@
+import { css } from '@emotion/react'
 import { lazy } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { colorPalette, colors } from './styles/colorPalette'
 
 const MainPage = lazy(() => import('@pages/main'))
 const DetailPage = lazy(() => import('@pages/detail'))
@@ -26,5 +28,4 @@ function App() {
     </BrowserRouter>
   )
 }
-
 export default App
