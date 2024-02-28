@@ -1,8 +1,11 @@
-import React from 'react'
+import { Flex } from '@/components'
+import { Top } from './layouts'
 
 const MainPage = () => {
   return (
-    <div>MainPage</div>
+    <Flex direction="column">
+      <Top />
+    </Flex>
   )
 }
 
