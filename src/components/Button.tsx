@@ -19,7 +19,7 @@ const Button = styled.button<ButtonProps>(
   {
     cursor: 'pointer',
     fontWeight: 'bold',
-    borderRadius: '6px',
+    borderRadius: '10px',
   },
   ({ color = 'primary', weak }) =>
     weak ? buttonWeakMap[color] : buttonColorMap[color],
@@ -29,7 +29,6 @@ const Button = styled.button<ButtonProps>(
       ? css`
           display: block;
           width: 100%;
-          border-radius: 0;
         `
       : undefined,
   ({ disabled }) =>

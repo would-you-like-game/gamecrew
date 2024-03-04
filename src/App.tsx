@@ -17,6 +17,7 @@ function App() {
       <Suspense fallback={<div>잠시 기다리렴</div>}>
         <Routes>
           <Route path="/" Component={MainPage} />
+          <Route path="/category/:category" Component={MainPage} />
           <Route path="/login" Component={LogainPage} />
           <Route path="/signup" Component={SignupPage} />
           <Route path="/detail/:id" Component={DetailPage} />

@@ -1,35 +1,29 @@
 import { css } from '@emotion/react'
-import { Button, Flex } from '.'
+import { Flex, LinkedButton } from '.'
 import { SearchInput } from '@/pages/main/components'
 import { colors } from '@/styles/colorPalette'
-import useMovePage from '@/hooks/useMovePage'
+import { Link } from 'react-router-dom'
 
 interface HeaderProps {
   isSearch?: boolean
 }
 
 const Header = ({ isSearch = false }: HeaderProps) => {
-  const { onClickMovePage } = useMovePage()
   return (
     <Flex justify="space-between" align="center" css={headerStyle}>
-      <img
-        src="/images/mainLogo.png"
-        alt="mainLogo"
-        height={100}
-        css={mainLogoStyles}
-        onClick={() => onClickMovePage({ page: '/' })}
-      />
+      <Link to="/">
+        <img
+          src="/images/mainLogo.png"
+          alt="mainLogo"
+          height={100}
+          css={mainLogoStyles}
+        />
+      </Link>
       {isSearch && <SearchInput />}
       <Flex css={buttonBoxStyles}>
-        <Button
-          color="reverse"
-          onClick={() => onClickMovePage({ page: '/login' })}
-        >
+        <LinkedButton to="/login" size="tiny" color="reverse">
           로그인
-        </Button>
-        <Button onClick={() => onClickMovePage({ page: '/signup' })}>
-          회원가입
-        </Button>
+        </LinkedButton>
       </Flex>
     </Flex>
   )
