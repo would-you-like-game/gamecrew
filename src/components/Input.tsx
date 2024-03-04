@@ -1,8 +1,12 @@
 import { colors } from '@/styles/colorPalette'
+import { typographyMap } from '@/styles/typography'
 import styled from '@emotion/styled'
 
-const Input = styled.input`
-  padding: 0 16px;
+interface InputProps {
+  isSearch?: boolean
+}
+const Input = styled.input<InputProps>`
+  /* padding: 0 16px;
   font-size: 15px;
   height: 30px;
   font-weight: 500;
@@ -10,7 +14,13 @@ const Input = styled.input`
   border-radius: 60px;
   width: 100%;
   min-width: 400px;
-  box-sizing: border-box;
+  box-sizing: border-box; */
+
+  ${typographyMap.t5}
+  padding: 10px 20px;
+  border: 1px solid ${colors.black400};
+  border-radius: 15px;
+  flex: 1;
 
   ::placeholder {
     color: ${colors.black400};
@@ -23,4 +33,5 @@ const Input = styled.input`
     border-color: ${colors.red100};
   }
 `
+
 export default Input
