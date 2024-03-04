@@ -1,10 +1,11 @@
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
-import './index.css'
 import { Global } from '@emotion/react'
-import globalStyles from '@styles/globalStyles.ts'
+import GlobalStyle from '@styles/globalStyles.ts'
 
-ReactDOM.createRoot(document.getElementById('root')!).render(<>
-<Global styles={globalStyles} />
-<App />
-</>)
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <>
+    <Global styles={GlobalStyle} />
+    <App />
+  </>,
+)
