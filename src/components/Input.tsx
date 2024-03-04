@@ -1,12 +1,14 @@
 import { colors } from '@/styles/colorPalette'
 import { typographyMap } from '@/styles/typography'
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 
 interface InputProps {
-  isSearch?: boolean
+  $isSearch?: boolean
 }
-const Input = styled.input<InputProps>`
-  /* padding: 0 16px;
+
+const searchStyle = css`
+  padding: 0 16px;
   font-size: 15px;
   height: 30px;
   font-weight: 500;
@@ -14,13 +16,18 @@ const Input = styled.input<InputProps>`
   border-radius: 60px;
   width: 100%;
   min-width: 400px;
-  box-sizing: border-box; */
+  box-sizing: border-box;
+`
 
+const Input = styled.input<InputProps>`
   ${typographyMap.t5}
   padding: 10px 20px;
   border: 1px solid ${colors.black400};
   border-radius: 15px;
+
   flex: 1;
+
+  ${({ $isSearch }) => $isSearch && searchStyle}
 
   ::placeholder {
     color: ${colors.black400};
