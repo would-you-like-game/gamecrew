@@ -46,8 +46,12 @@ export const buttonWeakMap = {
 
 export const buttonSizeMap = {
   tiny: css`
-    font-size: 14px;
+    font-size: 16px;
     padding: 8px 18px;
+  `,
+  large: css`
+    font-size: 24px;
+    padding: 16px 18px;
   `,
 }
 
