@@ -10,17 +10,12 @@ interface HeaderProps {
 
 const Header = ({ isSearch = false }: HeaderProps) => {
   return (
-    <Flex justify="space-between" align="center" css={headerStyle}>
-      <Link to="/">
-        <img
-          src="/images/mainLogo.png"
-          alt="mainLogo"
-          height={100}
-          css={mainLogoStyles}
-        />
+    <Flex align="center" css={headerStyle}>
+      <Link to="/" css={mainLogoStyles}>
+        <img src="/images/mainLogo.png" alt="mainLogo" height={200} />
       </Link>
       {isSearch && <SearchInput />}
-      <Flex css={buttonBoxStyles}>
+      <Flex justify="center" css={userBoxStyles}>
         <LinkedButton to="/login" size="tiny" color="reverse">
           로그인
         </LinkedButton>
@@ -31,18 +26,19 @@ const Header = ({ isSearch = false }: HeaderProps) => {
 
 const headerStyle = css`
   width: calc(100vw - 20px);
-  max-width: 1280px;
-  height: 60px;
-  padding: 0 10px;
+  width: 1920px;
+  height: 100px;
+  padding: 0 10px 0 0;
   background-color: ${colors.black100};
   box-shadow: 0 4px 6px -7px ${colors.black};
-  gap: calc(10%);
-`
-const buttonBoxStyles = css`
-  gap: 10px;
 `
 const mainLogoStyles = css`
   cursor: pointer;
+  width: 450px;
+  padding-left: 70px;
 `
-
+const userBoxStyles = css`
+  margin-left: 30px;
+  width: 300px;
+`
 export default Header
