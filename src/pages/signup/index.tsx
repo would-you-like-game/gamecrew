@@ -1,7 +1,12 @@
-import React from 'react'
+import { HeaderlessLayout } from '@/components'
+import { SignupForm } from './components'
 
 const SignupPage = () => {
-  return <div>SignupPage</div>
+  return (
+    <HeaderlessLayout>
+      <SignupForm />
+    </HeaderlessLayout>
+  )
 }
 
 export default SignupPage

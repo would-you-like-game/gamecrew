@@ -1,6 +1,10 @@
 import { css } from '@emotion/react'
 
 export const typographyMap = {
+  logo: css`
+    font-size: 65px;
+    line-height: 1.35;
+  `,
   t1: css`
     font-size: 30px;
     line-height: 1.35;

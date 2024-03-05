@@ -5,6 +5,7 @@ import {
   buttonSizeMap,
   buttonWeakMap,
 } from '@/styles/button'
+import { typographyMap, Typography } from '@/styles/typography'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 
@@ -14,6 +15,7 @@ interface ButtonProps {
   weak?: boolean
   full?: boolean
   disabled?: boolean
+  typography?: Typography
 }
 const Button = styled.button<ButtonProps>(
   {
@@ -38,6 +40,7 @@ const Button = styled.button<ButtonProps>(
           cursor: initial;
         `
       : undefined,
+  ({ typography = 't5' }) => typographyMap[typography],
 )
 
 export default Button
