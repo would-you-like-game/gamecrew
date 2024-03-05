@@ -51,3 +51,5 @@ export const CATEGORY = [
     url: '/category/etc',
   },
 ] as const
+
+export type CategoryValues = (typeof CATEGORY)[number]['value']
