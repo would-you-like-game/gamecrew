@@ -1,10 +1,11 @@
-import SignupForm from './components/SignupForm'
+import { HeaderlessLayout } from '@/components'
+import { SignupForm } from './components'
 
 const SignupPage = () => {
   return (
-    <div>
+    <HeaderlessLayout>
       <SignupForm />
-    </div>
+    </HeaderlessLayout>
   )
 }
 

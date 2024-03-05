@@ -4,8 +4,8 @@ import React, {
   forwardRef,
   useState,
 } from 'react'
-import Input from '@components/Input'
-import Text from '@components/Text'
+import { Input, Text } from '.'
+import { css } from '@emotion/react'
 
 interface TextFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   hasError?: boolean
@@ -27,7 +27,7 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
       onBlur?.(e)
     }
     return (
-      <div>
+      <div css={textFieldContainerStyle}>
         <Input
           ref={ref}
           aria-invalid={hasError}
@@ -49,5 +49,9 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
     )
   },
 )
+
+const textFieldContainerStyle = css`
+  flex: 1;
+`
 
 export default TextField
