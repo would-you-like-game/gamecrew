@@ -27,14 +27,12 @@ const listRowContentsStyles = css`
   flex: 1;
 `
 
-const ListRowCategorys = ({ to, text }: { to: string; text: string }) => {
+const ListRowCategorys = ({ text }: { text: string }) => {
   return (
-    <Link to={to}>
-      <Flex align="center">
-        <Spacing size={12} direction="horizontal" />
-        <Text typography="t3">{text}</Text>
-      </Flex>
-    </Link>
+    <Flex align="center">
+      <Spacing size={12} direction="horizontal" />
+      <Text typography="t3">{text}</Text>
+    </Flex>
   )
 }
 

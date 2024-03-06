@@ -1,12 +1,13 @@
 import { Input } from '@/components'
 import { colors } from '@/styles/colorPalette'
 import { css } from '@emotion/react'
+import styled from '@emotion/styled'
 const SearchInput = () => {
   return (
-    <div style={{ position: 'relative', flex: 1 }}>
-      <Input placeholder="검색어를 입력해주세요" />
+    <Container>
+      <Input placeholder="검색어를 입력해주세요" css={inputStyle} />
       <SearchIcon />
-    </div>
+    </Container>
   )
 }
 
@@ -24,9 +25,18 @@ const SearchIcon = () => {
 }
 const searchIconStyles = css`
   position: absolute;
-  top: 5px;
-  right: 10px;
-  width: 20px;
-  height: 20px;
+  right: 20px;
+  top: 10px;
+  width: 30px;
+  height: 30px;
 `
+const Container = styled.div`
+  position: relative;
+  flex: 1;
+`
+const inputStyle = css`
+  height: 50px;
+  padding-left: 30px;
+`
+
 export default SearchInput

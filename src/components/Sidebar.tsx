@@ -20,12 +20,12 @@ const Sidebar = ({ content }: { content: React.ReactNode }) => {
 
 const contentStyles = css`
   padding-left: 20px;
-  gap: 11px;
+  gap: 20px;
 `
 
 const containerStyle = css`
   width: 450px;
-  /* 헤더 값을 새로 설정해야 하니 나중에 수정하자 */
+  height: calc(100vh - 100px);
   background-color: ${colors.black100};
   padding: 35px 55px;
 `

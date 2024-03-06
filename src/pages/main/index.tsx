@@ -1,8 +1,18 @@
 import { Circle, Flex, Header, ListRow, Sidebar } from '@/components'
-import { CATEGORY } from '@/constant'
+import { CATEGORY, CategoryValues } from '@/constant'
 import getSortedColor from '@/utils/getSortedColor'
+import { PostList } from './components'
+import { Link } from 'react-router-dom'
+import { useState } from 'react'
+
+const backgroundColor = getSortedColor({
+  max: CATEGORY.length,
+  color: 'blue',
+})
 
 const MainPage = () => {
+  const [selectedCategory, setSelectedCategory] =
+    useState<CategoryValues>('total')
   return (
     <Flex direction="column">
       <Header isSearch={true} />
@@ -10,13 +20,8 @@ const MainPage = () => {
         <Sidebar
           content={
             <>
-              {CATEGORY.map(({ url, ko }, index) => {
-                const backgroundColor = getSortedColor({
-                  max: CATEGORY.length,
-                  color: 'blue',
-                })
-                console.log(backgroundColor[index])
-                return (
+              {CATEGORY.map(({ url, ko }, index) => (
+                <Link to={url}>
                   <ListRow
                     key={index}
                     left={
@@ -25,14 +30,14 @@ const MainPage = () => {
                         backgroundColor={backgroundColor[index]}
                       />
                     }
-                    contents={<ListRow.Category to={url} text={ko} />}
+                    contents={<ListRow.Category text={ko} />}
                   />
-                )
-              })}
+                </Link>
+              ))}
             </>
           }
         />
-        <div>주요 컨텐츠</div>
+        <PostList />
       </Flex>
     </Flex>
   )

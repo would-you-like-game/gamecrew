@@ -5,10 +5,17 @@ import styled from '@emotion/styled'
 interface CircleProps {
   size: number
   backgroundColor?: Colors
+  border?: boolean
 }
 
 const Circle = styled.div<CircleProps>(
   { borderRadius: '100%' },
+  ({ border }) =>
+    border
+      ? css`
+          border: 1px solid ${colors.gray400};
+        `
+      : null,
   ({ size }) => css`
     display: block;
     width: ${size}px;
@@ -22,7 +29,7 @@ const Circle = styled.div<CircleProps>(
       : css`
           background-image: url('/images/favicon.png');
           background-size: cover;
-          background-position: calc(100% + 5px) center;
+          background-position: calc(100% + 6px) center;
         `,
 )
 
