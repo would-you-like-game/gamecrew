@@ -24,7 +24,7 @@ const Input = styled.input<InputProps>`
   border: 1px solid ${colors.black400};
   border-radius: 15px;
   box-sizing: border-box;
-  width: 100%;
+  flex: 1;
 
   ${({ $isSearch }) => $isSearch && searchStyle}
 

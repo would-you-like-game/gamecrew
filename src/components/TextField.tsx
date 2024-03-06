@@ -4,16 +4,17 @@ import React, {
   forwardRef,
   useState,
 } from 'react'
-import { Input, Text } from '.'
+import { Flex, Input, Spacing, Text } from '.'
 import { css } from '@emotion/react'
 
 interface TextFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   hasError?: boolean
-  helpMessage?: React.ReactNode
+  helpMessage?: string
+  children?: React.ReactNode
 }
 
 const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
-  ({ hasError, helpMessage, onFocus, onBlur, ...props }, ref) => {
+  ({ hasError, helpMessage, children, onFocus, onBlur, ...props }, ref) => {
     const [focused, setFocused] = useState(false)
     const labelColor = hasError ? 'red500' : focused ? 'blue500' : undefined
 
@@ -28,22 +29,27 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
     }
     return (
       <div css={textFieldContainerStyle}>
-        <Input
-          ref={ref}
-          aria-invalid={hasError}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          {...props}
-        />
-        {helpMessage && (
+        <Flex gap={10}>
+          <Input
+            ref={ref}
+            aria-invalid={hasError}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            {...props}
+          />
+          {children}
+        </Flex>
+        {helpMessage ? (
           <Text
             typography="t7"
             color={labelColor}
             display="inline-block"
-            style={{ marginTop: 6, fontSize: 12 }}
+            style={{ margin: '6px 0 0 6px', fontSize: 12 }}
           >
             {helpMessage}
           </Text>
+        ) : (
+          <Spacing size={24} />
         )}
       </div>
     )
@@ -51,7 +57,7 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
 )
 
 const textFieldContainerStyle = css`
-  flex: 1;
+  width: 100%;
 `
 
 export default TextField
