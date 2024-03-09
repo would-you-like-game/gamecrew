@@ -76,7 +76,7 @@ const SignupForm = ({
           },
         })}
       />
-      <Button typography="t4" onClick={handleSubmit(onSubmit)}>
+      <Button typography="t5" onClick={handleSubmit(onSubmit)}>
         회원가입
       </Button>
     </Flex>
