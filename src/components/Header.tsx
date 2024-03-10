@@ -1,14 +1,34 @@
 import { css } from '@emotion/react'
-import { Flex, LinkedButton } from '.'
+import { Circle, Flex, LinkedButton } from '.'
 import { SearchInput } from '@/pages/main/components'
 import { colors } from '@/styles/colorPalette'
 import { Link } from 'react-router-dom'
+import useUser from '@/hooks/auth/useUser'
+import { useCallback } from 'react'
 
 interface HeaderProps {
   isSearch?: boolean
 }
 
 const Header = ({ isSearch = false }: HeaderProps) => {
+  const user = useUser()
+
+  const renderButton = useCallback(() => {
+    if (user != null) {
+      return (
+        <Flex>
+          <Circle size={25} />
+        </Flex>
+      )
+    } else {
+      return (
+        <LinkedButton to="/login" size="tiny" color="reverse">
+          로그인
+        </LinkedButton>
+      )
+    }
+  }, [user])
+
   return (
     <Flex align="center" css={headerStyle}>
       <Link to="/" css={mainLogoStyles}>
@@ -16,9 +36,7 @@ const Header = ({ isSearch = false }: HeaderProps) => {
       </Link>
       {isSearch && <SearchInput />}
       <Flex justify="center" css={userBoxStyles}>
-        <LinkedButton to="/login" size="tiny" color="reverse">
-          로그인
-        </LinkedButton>
+        {renderButton()}
       </Flex>
     </Flex>
   )
