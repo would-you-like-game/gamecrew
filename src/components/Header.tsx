@@ -5,6 +5,8 @@ import { colors } from '@/styles/colorPalette'
 import { Link } from 'react-router-dom'
 import useUser from '@/hooks/auth/useUser'
 import { useCallback } from 'react'
+import { signOut } from 'firebase/auth'
+import { auth } from '@/apis/firebase'
 
 interface HeaderProps {
   isSearch?: boolean
@@ -13,10 +15,14 @@ interface HeaderProps {
 const Header = ({ isSearch = false }: HeaderProps) => {
   const user = useUser()
 
+  const logout = useCallback(() => {
+    signOut(auth)
+  }, [])
+
   const renderButton = useCallback(() => {
     if (user != null) {
       return (
-        <Flex>
+        <Flex onClick={logout}>
           <Circle size={25} />
         </Flex>
       )
