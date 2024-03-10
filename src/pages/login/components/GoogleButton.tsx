@@ -1,6 +1,9 @@
 import { Button } from '@/components'
 import { css } from '@emotion/react'
+import useGoogleSignin from '../hooks/useGoogleSignin'
 const GoogleButton = () => {
+  const { signin } = useGoogleSignin()
+
   return (
     <Button
       full={true}
@@ -8,6 +11,7 @@ const GoogleButton = () => {
       typography="t5"
       bold={false}
       css={buttonStyle}
+      onClick={signin}
     >
       <GoogleIcon />
       구글 로그인
