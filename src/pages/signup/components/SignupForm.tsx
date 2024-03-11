@@ -25,7 +25,7 @@ const SignupForm = ({
   }
 
   return (
-    <Flex direction="column" css={formContainerStyle}>
+    <Flex direction="column" css={formContainerStyle} gap={10}>
       <TextField
         placeholder="닉네임"
         helpMessage={formState.errors['nickname']?.message as string}
@@ -64,9 +64,9 @@ const SignupForm = ({
       <TextField
         placeholder="비밀번호 확인"
         type="password"
-        helpMessage={formState.errors['rePassword']?.message as string}
-        hasError={formState.errors['rePassword'] != null}
-        {...register('rePassword', {
+        helpMessage={formState.errors['password']?.message as string}
+        hasError={formState.errors['password'] != null}
+        {...register('password', {
           required: true,
           validate: {
             matchPassword: (value) => {
@@ -84,10 +84,8 @@ const SignupForm = ({
   )
 }
 
-
 const formContainerStyle = css`
   width: 650px;
-  gap: 10px;
 `
 
 export default SignupForm
