@@ -1,17 +1,19 @@
 import { getNicknameUser } from '@/apis/user'
 import { TextField } from '.'
+import { FieldError, FieldValues, UseFormRegister } from 'react-hook-form'
+import { BaseForm } from '@/models/form'
 
 const Form = ({
   form,
   register,
-  formState,
+  error,
   getValues,
   children,
 }: {
-  form: any
-  register: any
-  formState: any
-  getValues?: any
+  form: BaseForm
+  register: UseFormRegister<FieldValues>
+  error: FieldError
+  getValues?: () => FieldValues
   children?: React.ReactNode
 }) => {
   const validateNickname = async (value: string) => {
@@ -24,24 +26,26 @@ const Form = ({
   }
 
   const matchPassword = (value: string) => {
-    return getValues().password === value || '비밀번호가 일치하지 않습니다'
+    return getValues?.().password === value || '비밀번호가 일치하지 않습니다'
   }
 
   return (
     <TextField
       placeholder={form.placeholder}
       type={form.isPassword ? 'password' : 'string'}
-      helpMessage={formState.errors[form.id]?.message}
-      hasError={formState.errors[form.id] != null}
+      helpMessage={error?.message}
+      hasError={error != null}
       {...register(form.id, {
         required: true,
-        pattern: form.validation ? VALIDATION_MESSAGE_MAP[form.validation] : '',
+        pattern: form.validation
+          ? VALIDATION_MESSAGE_MAP[form.validation]
+          : undefined,
         validate:
-          form.id === 'email'
+          form.id === 'nickname'
             ? validateNickname
             : form.id === 'rePassword'
               ? matchPassword
-              : '',
+              : undefined,
       })}
     >
       {children}

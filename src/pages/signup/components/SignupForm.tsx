@@ -3,12 +3,11 @@ import { Button, Flex, Form } from '@/components'
 import { COLLECTIONS } from '@/constants'
 import useMovePage from '@/hooks/useMovePage'
 import { BaseForm } from '@/models/form'
-import { SignupFormValues } from '@/models/signup'
 import { css } from '@emotion/react'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { collection, doc, setDoc } from 'firebase/firestore'
 import { useCallback } from 'react'
-import { useForm } from 'react-hook-form'
+import { FieldError, FieldValues, useForm } from 'react-hook-form'
 
 const SIGNUPFORM: BaseForm[] = [
   {
@@ -37,19 +36,17 @@ const SIGNUPFORM: BaseForm[] = [
   {
     id: 'rePassword',
     placeholder: '비밀번호 확인',
-    validation: 'rePassword',
     isPassword: true,
   },
 ]
 
 const SignupForm = () => {
   const { onClickMovePage } = useMovePage()
-  const { register, formState, handleSubmit, getValues } =
-    useForm<SignupFormValues>({
-      mode: 'onChange',
-    })
+  const { register, formState, handleSubmit, getValues } = useForm<FieldValues>({
+    mode: 'onChange',
+  })
 
-  const onSubmit = async (formValues: SignupFormValues) => {
+  const onSubmit = async (formValues: FieldValues) => {
     const { nickname, email, password } = formValues
     const { user } = await createUserWithEmailAndPassword(auth, email, password)
 
@@ -84,7 +81,7 @@ const SignupForm = () => {
         <Form
           key={form.id}
           form={form}
-          formState={formState}
+          error={formState.errors[form.id] as FieldError}
           register={register}
           getValues={getValues}
         >
