@@ -1,14 +1,32 @@
+import { getNicknameUser } from '@/apis/user'
 import { TextField } from '.'
 
 const Form = ({
   form,
   register,
   formState,
+  getValues,
+  children,
 }: {
-  form: any //일단 any로 놓고 타입 정의하자
+  form: any
   register: any
   formState: any
+  getValues?: any
+  children?: React.ReactNode
 }) => {
+  const validateNickname = async (value: string) => {
+    try {
+      const users = await getNicknameUser(value)
+      return users.length === 0 || '이미 사용중인 닉네임입니다.'
+    } catch (error) {
+      return '닉네임 확인 중 오류가 발생했습니다.'
+    }
+  }
+
+  const matchPassword = (value: string) => {
+    return getValues().password === value || '비밀번호가 일치하지 않습니다'
+  }
+
   return (
     <TextField
       placeholder={form.placeholder}
@@ -16,10 +34,18 @@ const Form = ({
       helpMessage={formState.errors[form.id]?.message}
       hasError={formState.errors[form.id] != null}
       {...register(form.id, {
-        required: form.required,
+        required: true,
         pattern: form.validation ? VALIDATION_MESSAGE_MAP[form.validation] : '',
+        validate:
+          form.id === 'email'
+            ? validateNickname
+            : form.id === 'rePassword'
+              ? matchPassword
+              : '',
       })}
-    />
+    >
+      {children}
+    </TextField>
   )
 }
 
