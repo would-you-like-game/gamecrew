@@ -1,6 +1,7 @@
 import React from 'react'
 import { Flex, Spacing, Text } from '.'
 import { css } from '@emotion/react'
+import { Link } from 'react-router-dom'
 
 const HeaderlessLayout = ({
   children,
@@ -16,7 +17,14 @@ const HeaderlessLayout = ({
       justify="center"
       css={ContainerStyle}
     >
-      <img src="/images/mainLogo.png" alt="mainLogo" width={550} height={135} />
+      <Link to={'/'}>
+        <img
+          src="/images/mainLogo.png"
+          alt="mainLogo"
+          width={550}
+          height={135}
+        />
+      </Link>
       <Spacing size={25} />
 
       <Text typography="t1" bold={true}>
