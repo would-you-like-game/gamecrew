@@ -2,9 +2,10 @@ import { auth } from '@/apis/firebase'
 import { Button, Flex, Form } from '@/components'
 import useMovePage from '@/hooks/useMovePage'
 import { css } from '@emotion/react'
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { FieldError, FieldValues, useForm } from 'react-hook-form'
 import { BaseForm } from '@/models/form'
+import { FirebaseError } from 'firebase/app'
 
 const LOGINFORM: BaseForm[] = [
   {
@@ -22,8 +23,9 @@ const LOGINFORM: BaseForm[] = [
 
 const LoginForm = () => {
   const { onClickMovePage } = useMovePage()
-  const { register, formState, handleSubmit } = useForm<FieldValues>({
-    mode: 'onChange',
+  const { register, formState, handleSubmit, reset } = useForm<FieldValues>({
+    mode: 'onSubmit',
+    defaultValues: { email: '', password: '' },
   })
 
   const onSubmit = async (formValue: FieldValues) => {
@@ -31,10 +33,25 @@ const LoginForm = () => {
 
     try {
       await signInWithEmailAndPassword(auth, email, password)
-      onClickMovePage({ page: '/' })
     } catch (e) {
-      console.log(e, '공통alert으로 에러처리')
+      console.log('error!!', e)
+      if (e instanceof FirebaseError) {
+        if (e.code === 'auth/invalid-credential') {
+          reset()
+          alert('이메일 또는 비밀번호를 확인해주세요 ')
+        }
+      } else alert('오류로 인해 다시한번 로그인 시도해주세요')
+      return
     }
+    //TODO: 공통 alert 처리
+
+    await auth.currentUser?.reload()
+    if (auth.currentUser?.emailVerified) onClickMovePage({ page: '/' })
+    else {
+      signOut(auth)
+      alert('이메일 인증이 완료되지 않았습니다. 이메일을 확인해주세요')
+    }
+    //TODO: 공통 alert 처리
   }
 
   return (
