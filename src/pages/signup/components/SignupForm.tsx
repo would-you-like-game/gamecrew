@@ -4,9 +4,12 @@ import { COLLECTIONS } from '@/constants'
 import useMovePage from '@/hooks/useMovePage'
 import { BaseForm } from '@/models/form'
 import { css } from '@emotion/react'
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  updateProfile,
+} from 'firebase/auth'
 import { collection, doc, setDoc } from 'firebase/firestore'
-import { useCallback } from 'react'
 import { FieldError, FieldValues, useForm } from 'react-hook-form'
 
 const SIGNUPFORM: BaseForm[] = [
@@ -14,11 +17,6 @@ const SIGNUPFORM: BaseForm[] = [
     id: 'email',
     placeholder: '이메일',
     validation: 'email',
-    isPassword: false,
-  },
-  {
-    id: 'emailAuth',
-    placeholder: '인증번호',
     isPassword: false,
   },
   {
@@ -42,9 +40,11 @@ const SIGNUPFORM: BaseForm[] = [
 
 const SignupForm = () => {
   const { onClickMovePage } = useMovePage()
-  const { register, formState, handleSubmit, getValues } = useForm<FieldValues>({
-    mode: 'onChange',
-  })
+  const { register, formState, handleSubmit, getValues } = useForm<FieldValues>(
+    {
+      mode: 'onChange',
+    },
+  )
 
   const onSubmit = async (formValues: FieldValues) => {
     const { nickname, email, password } = formValues
@@ -59,21 +59,12 @@ const SignupForm = () => {
     }
     await setDoc(doc(collection(store, COLLECTIONS.USER), user.uid), newUser)
 
+    await sendEmailVerification(user)
+    alert('인증 이메일이 발송되었습니다. 이메일을 확인해주세요')
+    //TODO: 공용alert으로 변경
+
     onClickMovePage({ page: '/login' })
   }
-
-  const FormButton = useCallback((formId: string) => {
-    if (formId === 'email') {
-      return <Button color="reverse">인증번호 전송</Button>
-    } else if (formId === 'emailAuth') {
-      return (
-        <>
-          <Button color="reverse">확인</Button>
-          <Button color="reverse">재전송</Button>
-        </>
-      )
-    } else return
-  }, [])
 
   return (
     <Flex direction="column" css={formContainerStyle} gap={10}>
@@ -84,9 +75,7 @@ const SignupForm = () => {
           error={formState.errors[form.id] as FieldError}
           register={register}
           getValues={getValues}
-        >
-          {FormButton(form.id)}
-        </Form>
+        ></Form>
       ))}
       <Button typography="t5" onClick={handleSubmit(onSubmit)}>
         회원가입
