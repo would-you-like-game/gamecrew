@@ -1,25 +1,55 @@
+import { getNicknameUser } from '@/apis/user'
 import { TextField } from '.'
+import { FieldError, FieldValues, UseFormRegister } from 'react-hook-form'
+import { BaseForm } from '@/models/form'
 
 const Form = ({
   form,
   register,
-  formState,
+  error,
+  getValues,
+  children,
 }: {
-  form: any //일단 any로 놓고 타입 정의하자
-  register: any
-  formState: any
+  form: BaseForm
+  register: UseFormRegister<FieldValues>
+  error: FieldError
+  getValues?: () => FieldValues
+  children?: React.ReactNode
 }) => {
+  const validateNickname = async (value: string) => {
+    try {
+      const users = await getNicknameUser(value)
+      return users.length === 0 || '이미 사용중인 닉네임입니다.'
+    } catch (error) {
+      return '닉네임 확인 중 오류가 발생했습니다.'
+    }
+  }
+
+  const matchPassword = (value: string) => {
+    return getValues?.().password === value || '비밀번호가 일치하지 않습니다'
+  }
+
   return (
     <TextField
       placeholder={form.placeholder}
       type={form.isPassword ? 'password' : 'string'}
-      helpMessage={formState.errors[form.id]?.message}
-      hasError={formState.errors[form.id] != null}
+      helpMessage={error?.message}
+      hasError={error != null}
       {...register(form.id, {
-        required: form.required,
-        pattern: form.validation ? VALIDATION_MESSAGE_MAP[form.validation] : '',
+        required: true,
+        pattern: form.validation
+          ? VALIDATION_MESSAGE_MAP[form.validation]
+          : undefined,
+        validate:
+          form.id === 'nickname'
+            ? validateNickname
+            : form.id === 'rePassword'
+              ? matchPassword
+              : undefined,
       })}
-    />
+    >
+      {children}
+    </TextField>
   )
 }
 

@@ -1,82 +1,82 @@
-import { getNicknameUser } from '@/apis/user'
-import { Button, Flex, TextField } from '@/components'
-import { SignupFormValues } from '@/models/signup'
-import VALIDATION_MESSAGE_MAP from '@/utils/validation'
+import { auth, store } from '@/apis/firebase'
+import { Button, Flex, Form } from '@/components'
+import { COLLECTIONS } from '@/constants'
+import useMovePage from '@/hooks/useMovePage'
+import { BaseForm } from '@/models/form'
 import { css } from '@emotion/react'
-import { useForm } from 'react-hook-form'
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  updateProfile,
+} from 'firebase/auth'
+import { collection, doc, setDoc } from 'firebase/firestore'
+import { FieldError, FieldValues, useForm } from 'react-hook-form'
 
-const SignupForm = ({
-  onSubmit,
-}: {
-  onSubmit: (formValues: SignupFormValues) => void
-}) => {
-  const { register, formState, handleSubmit, getValues } =
-    useForm<SignupFormValues>({
+const SIGNUPFORM: BaseForm[] = [
+  {
+    id: 'email',
+    placeholder: '이메일',
+    validation: 'email',
+    isPassword: false,
+  },
+  {
+    id: 'nickname',
+    placeholder: '닉네임',
+    validation: 'nickname',
+    isPassword: false,
+  },
+  {
+    id: 'password',
+    placeholder: '비밀번호',
+    validation: 'password',
+    isPassword: true,
+  },
+  {
+    id: 'rePassword',
+    placeholder: '비밀번호 확인',
+    isPassword: true,
+  },
+]
+
+const SignupForm = () => {
+  const { onClickMovePage } = useMovePage()
+  const { register, formState, handleSubmit, getValues } = useForm<FieldValues>(
+    {
       mode: 'onChange',
-    })
+    },
+  )
 
-  const validateNickname = async () => {
-    try {
-      const users = await getNicknameUser(getValues().nickname)
-      return users.length === 0 || '이미 사용중인 닉네임입니다.'
-    } catch (error) {
-      return '닉네임 확인 중 오류가 발생했습니다.'
+  const onSubmit = async (formValues: FieldValues) => {
+    const { nickname, email, password } = formValues
+    const { user } = await createUserWithEmailAndPassword(auth, email, password)
+
+    await updateProfile(user, { displayName: nickname })
+
+    const newUser = {
+      uid: user.uid,
+      email: user.email,
+      nickname: nickname,
     }
+    await setDoc(doc(collection(store, COLLECTIONS.USER), user.uid), newUser)
+
+    await sendEmailVerification(user)
+    alert('인증 이메일이 발송되었습니다. 이메일을 확인해주세요')
+    //TODO: 공용alert으로 변경
+
+    onClickMovePage({ page: '/login' })
   }
 
   return (
     <Flex direction="column" css={formContainerStyle} gap={10}>
-      <TextField
-        placeholder="닉네임"
-        helpMessage={formState.errors['nickname']?.message as string}
-        hasError={formState.errors['nickname'] != null}
-        {...register('nickname', {
-          required: true,
-          pattern: VALIDATION_MESSAGE_MAP['nickname'],
-          validate: validateNickname,
-        })}
-      />
-      <TextField
-        placeholder="이메일"
-        helpMessage={formState.errors['email']?.message as string}
-        hasError={formState.errors['email'] != null}
-        {...register('email', {
-          required: true,
-          pattern: VALIDATION_MESSAGE_MAP['email'],
-        })}
-      >
-        {/* <Button color="reverse">인증번호 전송</Button> */}
-      </TextField>
-      {/* <TextField placeholder="인증번호 입력" name="emailAuthNum">
-        <Button color="reverse">확인</Button>
-        <Button color="reverse">재전송</Button>
-      </TextField> */}
-      <TextField
-        placeholder="비밀번호"
-        type="password"
-        helpMessage={formState.errors['password']?.message as string}
-        hasError={formState.errors['password'] != null}
-        {...register('password', {
-          required: true,
-          pattern: VALIDATION_MESSAGE_MAP['password'],
-        })}
-      />
-      <TextField
-        placeholder="비밀번호 확인"
-        type="password"
-        helpMessage={formState.errors['password']?.message as string}
-        hasError={formState.errors['password'] != null}
-        {...register('password', {
-          required: true,
-          validate: {
-            matchPassword: (value) => {
-              return (
-                getValues().password === value || '비밀번호가 일치하지 않습니다'
-              )
-            },
-          },
-        })}
-      />
+      {SIGNUPFORM.map((form) => (
+        <Form
+          key={form.id}
+          form={form}
+          error={formState.errors[form.id] as FieldError}
+          register={register}
+          getValues={getValues}
+        ></Form>
+      ))}
       <Button typography="t5" onClick={handleSubmit(onSubmit)}>
         회원가입
       </Button>

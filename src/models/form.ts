@@ -1,7 +1,6 @@
 export interface BaseForm {
-  id: string
+  id: 'email' | 'emailAuth' | 'nickname' | 'password' | 'rePassword'
   placeholder: string
-  required: boolean
   isPassword: boolean
-  validation?: string
+  validation?: 'email' | 'nickname' | 'password'
 }
